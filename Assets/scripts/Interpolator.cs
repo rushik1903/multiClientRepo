@@ -24,7 +24,9 @@ public class Interpolator : MonoBehaviour
     }
 
     private void Update() {
-        for(int i=0;i<futureTransformUpdates.Count;i++){
+        //List<TransformUpdate> futureTransformUpdatesProxy = futureTransformUpdates;
+
+        for (int i=0;i<futureTransformUpdates.Count;i++){
             if(NetworkManager.Singleton.ServerTick >= futureTransformUpdates[i].Tick){
                 if(futureTransformUpdates[i].IsTeleport){
                     to=futureTransformUpdates[i];
@@ -43,25 +45,28 @@ public class Interpolator : MonoBehaviour
                 i--;
                 timeElapsed = 0f;
                 timeToReachTarget = (to.Tick - from.Tick)*Time.fixedDeltaTime;
+
+
+                
             }
         }
         //changes here to 
-        timeElapsed+=Time.deltaTime;
+        timeElapsed += Time.deltaTime;
 
-        // if(timeToReachTarget==0){
-        //     timeToReachTarget=0.05f;
-        //     Debug.Log("here");
-        // }
+        if (timeToReachTarget == 0)
+        {
+            timeToReachTarget = 0.025f;
+        }
         // Debug.Log(timeToReachTarget);
 
 
-        // InterpolatePosition(timeElapsed / timeToReachTarget);
-        InterpolatePosition(timeElapsed / 0.05f);
+        InterpolatePosition(timeElapsed / timeToReachTarget);
+        //InterpolatePosition(timeElapsed / 0.05f);
         //to here
     }
 
     private void InterpolatePosition(float lerpAmount){
-        if((to.Position-previous.Position).sqrMagnitude < squareMovementThreshold){
+        if((to.Position-previous.Position).sqrMagnitude > squareMovementThreshold){
             if(to.Position != from.Position){
                 transform.position = Vector3.Lerp(from.Position,to.Position,lerpAmount);
             }

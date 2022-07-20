@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     private string username;
 
     private void OnDestroy(){
-        list.Remove(Id);
+        //list.Remove(Id);
     }
 
     private void Move(ushort tick, bool isTeleport, Vector3 newPosition, Vector3 forward){
@@ -64,9 +64,32 @@ public class Player : MonoBehaviour
 
     private static void PlayerMovement(Message message){
         if(list.TryGetValue(message.GetUShort(),out Player player)){
-            //if(player.IsLocal==false){
-                player.Move(message.GetUShort(), message.GetBool(), message.GetVector3(), message.GetVector3());
-            //}
+            player.Move(message.GetUShort(), message.GetBool(), message.GetVector3(), message.GetVector3());
         }
+    }
+
+    [MessageHandler((ushort)ServerToClientId.playerReconnect)]
+
+    private static void PlayerReconnect(Message message)
+    {
+        ushort oldId = message.GetUShort();
+        ushort newId = message.GetUShort();
+        foreach(Player player in list.Values)
+        {
+            if (player.Id==oldId)
+            {
+                if (!player.IsLocal)
+                {
+                    Player temp = player;
+                    list.Remove(player.Id);
+                    list[newId] = temp;
+
+                    player.Id = newId;
+                    Debug.Log(oldId.ToString() + newId.ToString());
+                    return;
+                }
+            }
+        }
+        Debug.Log(oldId.ToString() + newId.ToString());
     }
 }

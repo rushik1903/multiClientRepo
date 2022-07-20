@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     private bool[] inputs;
     private float yVelocity;
-    // private bool didTeleport;
+    private bool didTeleport;
 
     private void OnValidate() {
         // if(localPlayerController==null){
@@ -100,29 +100,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Move(Vector2 inputDirection, bool jump, bool sprint){
-        Vector3 moveDirection = Vector3.Normalize(camTransform.right*inputDirection.x+Vector3.Normalize(FlattenVector3(camTransform.forward))*inputDirection.y);
-        //Debug.Log(moveDirection);
-        moveDirection *= moveSpeed;
-        if(sprint){
-            moveDirection*=2f;
-        }
-        if(localPlayerController.isGrounded){
-            yVelocity=0f;
-            if(jump){
-                yVelocity=jumspeed;
-            }
-        }
-        yVelocity+=gravityAcceleration;
+    //private void Move(Vector2 inputDirection, bool jump, bool sprint){
+    //    Vector3 moveDirection = Vector3.Normalize(camTransform.right*inputDirection.x+Vector3.Normalize(FlattenVector3(camTransform.forward))*inputDirection.y);
+    //    //Debug.Log(moveDirection);
+    //    moveDirection *= moveSpeed;
+    //    if(sprint){
+    //        moveDirection*=2f;
+    //    }
+    //    if(localPlayerController.isGrounded){
+    //        yVelocity=0f;
+    //        if(jump){
+    //            yVelocity=jumspeed;
+    //        }
+    //    }
+    //    yVelocity+=gravityAcceleration;
 
-        moveDirection.y=yVelocity;
-        localPlayerController.Move(moveDirection);
-    }
+    //    moveDirection.y=yVelocity;
+    //    localPlayerController.Move(moveDirection);
+    //}
 
-    private Vector3 FlattenVector3(Vector3 vector){
-        vector.y=0;
-        return vector;
-    }
+    //private Vector3 FlattenVector3(Vector3 vector){
+    //    vector.y=0;
+    //    return vector;
+    //}
 
     #region Messages
 

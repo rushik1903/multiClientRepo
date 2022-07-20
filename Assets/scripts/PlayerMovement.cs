@@ -121,6 +121,7 @@ public class PlayerMovement : MonoBehaviour
 
         moveDirection.y=yVelocity;
         controller.Move(moveDirection);
+        //Debug.Log(controller.transform.position);
         
         for(int i=0;i<6;i++){
             inputs[i]=false;

@@ -2,11 +2,14 @@ using RiptideNetworking;
 using RiptideNetworking.Utils;
 using UnityEngine;
 using System;
+using TMPro;
+using UnityEngine.UI;
 
 public enum ServerToClientId : ushort
 {
     sync=1,
     playerSpawned,
+    playerReconnect,
     playerMovement,
 }
 
@@ -19,6 +22,7 @@ public enum ClientToServerId : ushort
 public class NetworkManager : MonoBehaviour
 {
     private static NetworkManager _singleton;
+    [SerializeField] private InputField inputPort,inputIp;
 
     public static NetworkManager Singleton{
         get=>_singleton;
@@ -86,7 +90,13 @@ public class NetworkManager : MonoBehaviour
     }
 
     public void Connect(){
+        if (inputIp.text != "")
+        {
+            port = Convert.ToUInt16(inputPort.text);
+            ip = inputIp.text;
+        }
         Client.Connect($"{ip}:{port}");
+        Debug.Log(ip);
     }
 
     private void DidConnect(object sender, EventArgs e){
@@ -106,7 +116,7 @@ public class NetworkManager : MonoBehaviour
 
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e){
         if(Player.list.TryGetValue(e.Id,out Player player)){
-            Destroy(player.gameObject);
+            //Destroy(player.gameObject);
         }
     }
 
